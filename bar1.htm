@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bar</title>
+  </head>
+  <body>
+    <button onclick="istruzioni()">Istruzioni</button>
+    <button onclick="">Menu drink</button>
+    <button onclick="">Ordini</button>
+    <div id="out1"></div>
+    <script>
+      let click = 0;
+      function istruzioni() {
+        click++;
+        if (click == 1) document.getElementById("out1").innerHTML = "Ciao!";
+
+        if (click == 2)
+          document.getElementById("out1").innerHTML =
+            " sono un chatbot pronto per servire ...";
+
+        if (click == 3)
+          document.getElementById("out1").innerHTML =
+            "premi il secondo bottone per avere la lista dei drink che sono in grado di prepararti";
+      }
+    </script>
+  </body>
+</html>
