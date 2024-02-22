@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>numeri con bottoni</title>
+    <style>
+        body{
+            font-family:Arial, sans-serif;
+            text-align: center; 
+        }
+        button {
+            margin: 10px; 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer; 
+        }
+        #output{
+            font-size: 20px; 
+            margin-top: 20px; 
+        }
+ </style>
+</head>
+<body>
+    <button id="button1">Bottone 1</button>
+    <button id="button2">Bottone 2</button>
+    <button id="button3">Bottone 3</button>
+
+    <div id="output">premere il bottone per risultato</div>
+    <script>
+        let count1=0; 
+        let count2=0; 
+        let count3=0; 
+
+
+        function handleClick(buttonId) {
+            switch(buttonId){
+                case 'button1': 
+                count1+=2; 
+                document.getElementById('output').textContent='button1'+count1; 
+                break; 
+
+
+                case 'button2': 
+                count2+=3; 
+                document.getElementById('output').textContent='button2'+count2; 
+                break; 
+
+
+                case 'button3': 
+                count1+=7; 
+                document.getElementById('output').textContent='button3'+count3; 
+                break; 
+                default: 
+                break; 
+            }
+        }
+        document.getElementById('button1').addEventListener('click', function()
+        {
+            handleClick('button1'); 
+        }); 
+
+
+        document.getElementById('button2').addEventListener('click', function()
+        {
+            handleClick('button2'); 
+        }); 
+
+
+        document.getElementById('button3').addEventListener('click', function()
+        {
+            handleClick('button3'); 
+        }); 
+
+
+        document
+    </script>
+
+</body>
+</html
