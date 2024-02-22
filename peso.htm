@@ -1,1 +1,47 @@
-inserire codice 
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore peso</title>
+</head>
+
+<body>
+    <h2>Calcolatore peso</h2>
+    <div>
+        <label for="peso">Inserisci il tuo peso in kg:</label>
+        <input type="number" id="peso" step="any">
+    </div>
+    <div>
+        <label for="altezza">Inserisci la tua altezza in metri:</label>
+        <input type="number" id="altezza" step="any">
+    </div>
+    <button onclick="calcolaIMC()">Calcola peso</button>
+    <div id="risultato"></div>
+
+    <script>
+        function calcolaIMC() {
+            var peso = parseFloat(document.getElementById('peso').value);
+            var altezza = parseFloat(document.getElementById('altezza').value);
+            var imc = peso / (altezza * altezza);
+            var classificazione = "";
+
+            if (imc < 18.5) {
+                classificazione = "Sottopeso";
+            } else if (imc < 25) {
+                classificazione = "Normopeso";
+            } else if (imc < 30) {
+                classificazione = "Sovrappeso";
+            } else {
+                classificazione = "Obesità";
+            }
+
+            var risultatoHTML = "Il tuo IMC è: " + imc.toFixed(2) + "<br>";
+            risultatoHTML += "Classificazione del peso: " + classificazione;
+            document.getElementById('risultato').innerHTML = risultatoHTML;
+        }
+    </script>
+</body>
+
+</html>
