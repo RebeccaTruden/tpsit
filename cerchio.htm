@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Area Cerchio</title>
+    <style>
+        .square {
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            margin: 5px;
+            float: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Calcolatore Area Cerchio</h2>
+    <div>
+        <label for="raggio">Inserisci il raggio del cerchio:</label>
+        <input type="number" id="raggio">
+    </div>
+    <button onclick="calcolaArea()">Calcola Area</button>
+    <div id="risultato"></div>
+
+    <script>
+        function calcolaArea() {
+            var raggio = parseFloat(document.getElementById('raggio').value);
+            var area = Math.PI * raggio * raggio;
+            var risultatoHTML = "L'area del cerchio è: " + area.toFixed(2) + " unità di superficie.";
+            risultatoHTML += "<br><button onclick='stampaQuadrati(" + area.toFixed(0) + ")'>Stampa quadrati</button>";
+            document.getElementById('risultato').innerHTML = risultatoHTML;
+        }
+
+        function stampaQuadrati(area) {
+            var numQuadrati = area / (20 * 20);
+            var content = "";
+            for (var i = 0; i < numQuadrati; i++) {
+                content += "<div class='square'></div>";
+            }
+            document.getElementById('risultato').innerHTML += "<div>" + content + "</div>";
+        }
+    </script>
+</body>
+
+</html>
