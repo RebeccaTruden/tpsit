@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bar V 2.0</title>
+  </head>
+
+
+
+  <body>
+    <p id="demo"></p>
+
+    <button id="bottone-add" onclick="aggiungiDrink()">Aggiungi drink</button>
+    <button id="bottone-remove" onclick="cancellaDrink()">
+      Cancella drink
+    </button>
+    <button id="bottone-count" onclick="contaDrink()">Conta drink</button>
+    <button id="bottone-order" onclick="ordinaDrink()">ordina drink</button>
+
+    <p>Numero drink a menu :</p>
+    <p id="contaDrink"></p>
+    <p>Hai ordinato:</p>
+    <p id="ordine"></p>
+    <script>
+      const drinks = [
+        "coca-cola",
+        "fanta",
+        "sprite",
+        "chinotto",
+        "birra",
+        "vino",
+        "te alla pesca",
+      ];
+      const carrello = [];
+      document.getElementById("demo").innerHTML = drinks.join(", ");
+
+      function contaDrink() {
+        let length = drinks.length;
+        document.getElementById("contaDrink").innerHTML = drinks.length;
+      }
+      function aggiungiDrink() {
+        let text;
+        let drink = prompt("Inserisci il tuo drink nella lista:");
+        drinks.push(drink);
+        document.getElementById("demo").innerHTML = drinks;
+      }
+      function cancellaDrink() {
+        let drink = drinks.pop();
+        document.getElementById("demo").innerHTML = drinks;
+      }
+
+      function ordinaDrink() {
+        let text;
+        let drinkDaordinare = prompt(
+          "Richiedimi un drink (1 -" + drinks.length + ")"
+        );
+        carrello.push(drinkDaordinare);
+        drinks.push(drinks);
+        document.getElementById("ordine").innerHTML = drinks [carrello - 1];
+      }
+    </script>
+  </body>
+</html>
