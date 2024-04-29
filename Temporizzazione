@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambio di colore dei DIV sovrapposti</title>
+<style>
+    .contenitore {
+        position: relative;
+        width: 200px;
+        height: 200px;
+    }
+    .div-blu, .div-giallo {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    .div-blu {
+        background-color: blue;
+    }
+    .div-giallo {
+        background-color: yellow;
+    }
+    .div-rosso {
+        background-color: red;
+    }
+</style>
+</head>
+<body>
+
+<div class="contenitore" id="contenitore">
+    <div class="div-blu" id="divBlu"></div>
+    <div class="div-giallo" id="divGiallo"></div>
+</div>
+
+<script>
+    function ottieniPosizioneCasuale() {
+        var contenitore = document.getElementById('contenitore');
+        var maxX = contenitore.offsetWidth - 100;
+        var maxY = contenitore.offsetHeight - 100;
+        var posX = Math.floor(Math.random() * maxX);
+        var posY = Math.floor(Math.random() * maxY);
+        return [posX, posY];
+    }
+
+    function spostaDiv() {
+        var divBlu = document.getElementById('divBlu');
+        var divGiallo = document.getElementById('divGiallo');
+        var [x1, y1] = ottieniPosizioneCasuale();
+        var [x2, y2] = ottieniPosizioneCasuale();
+        divBlu.style.left = x1 + 'px';
+        divBlu.style.top = y1 + 'px';
+        divGiallo.style.left = x2 + 'px';
+        divGiallo.style.top = y2 + 'px';
+    }
+
+    function controllaSovrapposizione() {
+        var divBlu = document.getElementById('divBlu');
+        var divGiallo = document.getElementById('divGiallo');
+        var rectBlu = divBlu.getBoundingClientRect();
+        var rectGiallo = divGiallo.getBoundingClientRect();
+        if (!(rectBlu.right < rectGiallo.left ||
+            rectBlu.left > rectGiallo.right ||
+            rectBlu.bottom < rectGiallo.top ||
+            rectBlu.top > rectGiallo.bottom)) {
+            divBlu.classList.add('div-rosso');
+            divGiallo.classList.add('div-rosso');
+        } else {
+            divBlu.classList.remove('div-rosso');
+            divGiallo.classList.remove('div-rosso');
+        }
+    }
+
+    spostaDiv();
+    setInterval(controllaSovrapposizione, 1000); // Controlla la sovrapposizione ogni 1 secondo
+</script>
+
+</body>
+</html>
