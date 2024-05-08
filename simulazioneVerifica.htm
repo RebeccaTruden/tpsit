@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulazione</title>
+    <style>
+        .quadrato {
+            height: 50px;
+            width: 50px;
+            border: 1px solid black;
+            text-align: center;
+            margin: 10px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="quadrati-container">
+    </div>
+
+    <script>
+        let colori = ["rgb(245, 209, 215)", "rgb(51, 152, 246)", "rgb(180, 255, 180)", "rgb(255, 215, 180)"];
+
+        function scegliColore(numero) {
+            if (numero % 2 == 0) {
+                return colori[0];
+            } else {
+                return colori[1];
+            }
+        }
+
+        function isPrime(num) {
+            for(let i = 2, sqrt = Math.sqrt(num); i <= sqrt; i++)
+                if(num % i === 0) return false;
+            return num > 1;
+        }
+
+        let quadratiContainer = document.getElementById('quadrati-container');
+        for (let i = 0; i < 100; i++) {
+            let nc = Math.floor((Math.random() * 100));
+            let colore = scegliColore(nc);
+            let quadrato = document.createElement('div');
+            quadrato.className = 'quadrato';
+            quadrato.style.backgroundColor = colore;
+            quadrato.textContent = nc;
+            if (isPrime(nc)) {
+                quadrato.style = "rgb(180, 255, 180)";
+            }
+            quadratiContainer.appendChild(quadrato);
+        }
+    </script>
+</body>
+</html>
