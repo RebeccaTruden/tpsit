@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esercizio Matrice 8x8 con ChatGpt</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Esercizio: Matrice 8x8</h1> 
+    <h2>Utilizzo buono di ChatGpt</h2> 
+    <p>La seguente tabella mostra una matrice 8x8 dove ogni cella contiene la somma dei suoi indici di riga e colonna.</p>
+    <div id="matrice-container"></div>
+
+    <script>
+        // Funzione per creare e visualizzare la matrice
+        function creaMatrice() {
+            let matrice8x8 = [];
+
+            // Popoliamo la matrice con la somma degli indici
+            for (let i = 0; i < 8; i++) {
+                matrice8x8[i] = []; // Inizializziamo un nuovo array per ogni riga
+                for (let j = 0; j < 8; j++) {
+                    matrice8x8[i][j] = i + j; // Ogni elemento è la somma degli indici
+                }
+            }
+
+            return matrice8x8;
+        }
+
+        // Funzione per creare una tabella HTML dalla matrice
+        function creaTabella(matrice) {
+            let table = document.createElement('table');
+            let tbody = document.createElement('tbody');
+
+            for (let i = 0; i < matrice.length; i++) {
+                let row = document.createElement('tr');
+                for (let j = 0; j < matrice[i].length; j++) {
+                    let cell = document.createElement('td');
+                    cell.textContent = matrice[i][j];
+                    row.appendChild(cell);
+                }
+                tbody.appendChild(row);
+            }
+
+            table.appendChild(tbody);
+            return table;
+        }
+
+        // Creiamo la matrice e la tabella, poi la aggiungiamo al DOM
+        let matrice = creaMatrice();
+        let tabellaMatrice = creaTabella(matrice);
+        document.getElementById('matrice-container').appendChild(tabellaMatrice);
+    </script>
+</body>
+</html>
