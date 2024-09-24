@@ -48,6 +48,18 @@
         function getRandomNumber() {
             return Math.floor(Math.random() * 100) + 1;
         }
+         // Funzione per aggiornare il contenuto della pagina
+        function updateNumbers() {
+            const numbersDiv = document.getElementById('numbers');
+            const checkDiv = document.getElementById('check');
+            const randomNumber = getRandomNumber();
+            numbersDiv.textContent = `Numero Casuale: ${randomNumber}`;
+            if (randomNumber % 2 === 0) {
+                checkDiv.textContent = `Il numero è pari`;
+            } else {
+                checkDiv.textContent = `Il numero è dispari`;
+            }
+        }
 
           // Funzione per controllare se un numero è primo
         function isPrime(num) {
