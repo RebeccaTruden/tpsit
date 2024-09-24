@@ -42,16 +42,19 @@
     <button id="generate-button">Genera Numero Casuale</button>
     <div id="numbers"></div>
     <div id="check">Verifica se pari o dispari</div>
+    <div id="prime-check">Verifica se primo</div>
 
     <script>
         // Funzione per generare un numero casuale tra 1 e 100
         function getRandomNumber() {
             return Math.floor(Math.random() * 100) + 1;
         }
-         // Funzione per aggiornare il contenuto della pagina
+        
+        // Funzione per aggiornare il contenuto della pagina
         function updateNumbers() {
             const numbersDiv = document.getElementById('numbers');
             const checkDiv = document.getElementById('check');
+            const primeCheckDiv = document.getElementById('prime-check');
             const randomNumber = getRandomNumber();
             numbersDiv.textContent = `Numero Casuale: ${randomNumber}`;
             if (randomNumber % 2 === 0) {
@@ -59,9 +62,14 @@
             } else {
                 checkDiv.textContent = `Il numero è dispari`;
             }
+            if (isPrime(randomNumber)) {
+                primeCheckDiv.textContent = `Il numero è primo`;
+            } else {
+                primeCheckDiv.textContent = `Il numero non è primo`;
+            }
         }
 
-          // Funzione per controllare se un numero è primo
+        // Funzione per controllare se un numero è primo
         function isPrime(num) {
             if (num <= 1) return false; // 0 e 1 non sono primi
             for (let i = 2; i <= Math.sqrt(num); i++) {
