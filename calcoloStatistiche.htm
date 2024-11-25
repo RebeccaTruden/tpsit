@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistica - Interfaccia minima</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calcolatrice Statistica</h1>
+        <div class="input-container">
+            <label for="arrayInput">Inserisci i dati (separati da virgola):</label><br>
+            <input type="text" id="arrayInput" placeholder="1, 2, 3, 4, 5">
+        </div>
+        <button onclick="calcolaStatistiche()">Calcola</button>
+
+        <div class="result" id="result">
+            <h3>Risultati:</h3>
+            <p id="mean">Media: </p>
+            <p id="variance">Varianza: </p>
+            <p id="stdDev">Deviazione Standard: </p>
+            <p id="median">Mediana: </p>
+            <p id="mode">Moda: </p>
+        </div>
+    </div>
+
+    <script>
+        class Statistics {
+            // Metodo per calcolare la media
+            static mean(array) {
+                if (!array.length) return null;
+                const sum = array.reduce((acc, num) => acc + num, 0);
+                return sum / array.length;
+            }
+
+            // Metodo per calcolare la varianza
+            static variance(array) {
+                if (!array.length) return null;
+                const mean = this.mean(array);
+                const squaredDiffs = array.map(num => Math.pow(num - mean, 2));
+                return this.mean(squaredDiffs);
+            }
+
+            // Metodo per calcolare la deviazione standard
+            static standardDeviation(array) {
+                const variance = this.variance(array);
+                return variance !== null ? Math.sqrt(variance) : null;
+            }
+
+            // Metodo per calcolare la mediana
+            static median(array) {
+                if (!array.length) return null;
+                const sorted = [...array].sort((a, b) => a - b);
+                const mid = Math.floor(sorted.length / 2);
+
+                return sorted.length % 2 === 0
+                    ? (sorted[mid - 1] + sorted[mid]) / 2
+                    : sorted[mid];
+            }
+
+            // Metodo per calcolare la moda
+            static mode(array) {
+                if (!array.length) return null;
+                const frequencyMap = {};
+                array.forEach(num => {
+                    frequencyMap[num] = (frequencyMap[num] || 0) + 1;
+                });
+
+                const maxFrequency = Math.max(...Object.values(frequencyMap));
+                const modes = Object.keys(frequencyMap)
+                    .filter(key => frequencyMap[key] === maxFrequency)
+                    .map(Number);
+
+                return modes.length === 1 ? modes[0] : modes; // Ritorna la moda o un array di modali
+            }
+        }
+
+        function calcolaStatistiche() {
+            const input = document.getElementById("arrayInput").value;
+            const data = input.split(",").map(num => parseFloat(num.trim()));
+
+            if (data.some(isNaN)) {
+                alert("Per favore, inserisci solo numeri separati da virgola.");
+                return;
+            }
+
+            const mean = Statistics.mean(data);
+            const variance = Statistics.variance(data);
+            const stdDev = Statistics.standardDeviation(data);
+            const median = Statistics.median(data);
+            const mode = Statistics.mode(data);
+
+            document.getElementById("result").style.display = "block";
+            document.getElementById("mean").textContent = `Media: ${mean}`;
+            document.getElementById("variance").textContent = `Varianza: ${variance}`;
+            document.getElementById("stdDev").textContent = `Deviazione Standard: ${stdDev}`;
+            document.getElementById("median").textContent = `Mediana: ${median}`;
+            document.getElementById("mode").textContent = `Moda: ${Array.isArray(mode) ? mode.join(", ") : mode}`;
+        }
+    </script>
+</body>
+</html>
