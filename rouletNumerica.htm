@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulazione Estrazione Numeri</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .toggle-button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .toggle-button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        select, input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .output {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .list {
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 2px solid #ddd;
+            max-height: 300px;
+            overflow-y: scroll;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .list ul {
+            padding: 0;
+        }
+
+        .list li {
+            list-style-type: none;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gioco Estrazione Numeri</h1>
+
+    <div class="controls">
+        <!-- Bottoni Toggle per le scelte -->
+        <button id="pari" class="toggle-button">Pari</button>
+        <button id="dispari" class="toggle-button">Dispari</button>
+        
+        <!-- Decina con Dropdown -->
+        <label for="decina">Scegli una Decina:</label>
+        <select id="decina">
+            <option value="">--Seleziona--</option>
+            <option value="1">1-10</option>
+            <option value="2">11-20</option>
+            <option value="3">21-30</option>
+            <option value="4">31-40</option>
+            <option value="5">41-50</option>
+            <option value="6">51-60</option>
+            <option value="7">61-70</option>
+            <option value="8">71-80</option>
+            <option value="9">81-90</option>
+        </select>
+
+        <!-- Puntata fissa con input -->
+        <label for="puntata">Puntata Fissa:</label>
+        <input type="number" id="puntata" min="1" max="90" placeholder="1-90">
+    </div>
+
+    <div class="output">
+        <p id="estrazione">Numero Estratto: -</p>
+        <p id="vincite">Vincite: 0</p>
+        <p id="estrazioni-totali">Estrazioni Totali: 0</p>
+    </div>
+
+    <div class="list">
+        <h3>Numeri Estratti</h3>
+        <ul id="numeriEstratti">
+            <!-- Numeri estratti saranno aggiunti qui -->
+        </ul>
+    </div>
+
+    <button id="startButton" onclick="startSimulation()">Inizia Simulazione</button>
+
+    <script>
+        // Variabili globali
+        let estrazioniTotali = 0;
+        let vincite = 0;
+        let numeriEstratti = [];
+        let interval;
+
+        // Funzione per generare un numero casuale tra 1 e 90
+        function estrazioneNumero() {
+            return Math.floor(Math.random() * 90) + 1;
+        }
+
+        // Funzione per avviare la simulazione
+        function startSimulation() {
+            // Reset stato
+            estrazioniTotali = 0;
+            vincite = 0;
+            numeriEstratti = [];
+            document.getElementById('vincite').innerText = `Vincite: ${vincite}`;
+            document.getElementById('estrazioni-totali').innerText = `Estrazioni Totali: ${estrazioniTotali}`;
+            document.getElementById('numeriEstratti').innerHTML = ''; // Pulisce la lista dei numeri
+
+            // Disabilita il bottone per evitare multiple simulazioni
+            document.getElementById('startButton').disabled = true;
+
+            // Avvia la simulazione ogni 2 secondi
+            interval = setInterval(() => {
+                const numero = estrazioneNumero();
+                numeriEstratti.push(numero);
+                estrazioniTotali++;
+
+                // Aggiungi il numero estratto alla lista
+                const li = document.createElement('li');
+                li.innerText = numero;
+                document.getElementById('numeriEstratti').appendChild(li);
+
+                document.getElementById('estrazione').innerText = `Numero Estratto: ${numero}`;
+                document.getElementById('estrazioni-totali').innerText = `Estrazioni Totali: ${estrazioniTotali}`;
+
+                // Verifica se la condizione di vincita è soddisfatta
+                if (verificaVincita(numero)) {
+                    vincite++;
+                    document.getElementById('vincite').innerText = `Vincite: ${vincite}`;
+                }
+
+                // Ferma la simulazione dopo 10 vincite
+                if (vincite >= 10) {
+                    clearInterval(interval);
+                    alert(`Hai vinto 10 volte dopo ${estrazioniTotali} estrazioni!`);
+                    document.getElementById('startButton').disabled = false; // Rende di nuovo cliccabile il bottone
+                }
+
+            }, 2000); // Ogni 2 secondi
+        }
+
+        // Funzione per verificare le condizioni di vincita
+        function verificaVincita(numero) {
+            const pari = document.getElementById('pari').classList.contains('active');
+            const dispari = document.getElementById('dispari').classList.contains('active');
+            const decina = document.getElementById('decina').value;
+            const puntataFissa = document.getElementById('puntata').value;
+
+            // Verifica le condizioni di vincita
+            if (pari && numero % 2 === 0) return true;
+            if (dispari && numero % 2 !== 0) return true;
+            if (decina && Math.floor((numero - 1) / 10) + 1 == decina) return true;
+            if (puntataFissa && numero == puntataFissa) return true;
+
+            return false;
+        }
+
+        // Funzione per attivare/disattivare i bottoni toggle
+        document.querySelectorAll('.toggle-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('active');
+            });
+        });
+    </script>
+
+</body>
+</html>
