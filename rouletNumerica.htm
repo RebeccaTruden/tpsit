@@ -191,39 +191,38 @@
 
         function convertCSVToJSON() {
             const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+    const file = fileInput.files[0];
 
-            if (!file) {
-                alert('Per favore seleziona un file CSV');
-                return;
+    if (!file) {
+        alert('Per favore seleziona un file CSV');
+        return;
             }
 
             const reader = new FileReader();
-            reader.onload = function(event) {
-                const csvContent = event.target.result;
-                const lines = csvContent.split('\n');
-                const result = [];
+    reader.onload = function(event) {
+        const csvContent = event.target.result;
+        const lines = csvContent.split('\n');  // Dividi per righe (ogni numero è una riga)
+        const result = [];
 
                 for (let i = 1; i < lines.length; i++) {
-                    const currentLine = lines[i].split(',');
-                    if (currentLine.length > 1) {
-                        result.push({ "Numero": currentLine[0] });
-                    }
-                }
-
-                const jsonContent = JSON.stringify(result, null, 4);
-                console.log("JSON:", jsonContent);
-
-                const jsonBlob = new Blob([jsonContent], { type: 'application/json' });
-                const jsonUrl = URL.createObjectURL(jsonBlob);
-                const jsonLink = document.createElement('a');
-                jsonLink.setAttribute('href', jsonUrl);
-                jsonLink.setAttribute('download', 'numeri_estratti.json');
-                jsonLink.click();
-            };
-
-            reader.readAsText(file);
+            if (lines[i].trim() !== '') {
+                result.push({ "Numero": lines[i].trim() });
+            }
         }
+                const jsonContent = JSON.stringify(result, null, 4);
+
+       
+        console.log("JSON:", jsonContent);
+        const jsonBlob = new Blob([jsonContent], { type: 'application/json' });
+        const jsonUrl = URL.createObjectURL(jsonBlob);
+        const jsonLink = document.createElement('a');
+        jsonLink.setAttribute('href', jsonUrl);
+        jsonLink.setAttribute('download', 'numeri_estratti.json');
+        jsonLink.click();
+    };
+
+    reader.readAsText(file);
+}
 
         document.querySelectorAll('.toggle-button').forEach(button => {
             button.addEventListener('click', () => {
