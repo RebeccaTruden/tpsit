@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulazione Estrazione Numeri</title>
+    <title>Roulet numerica!</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,11 +81,9 @@
     <h1>Gioco Estrazione Numeri</h1>
 
     <div class="controls">
-        <!-- Bottoni Toggle per le scelte -->
         <button id="pari" class="toggle-button">Pari</button>
         <button id="dispari" class="toggle-button">Dispari</button>
         
-        <!-- Decina con Dropdown -->
         <label for="decina">Scegli una Decina:</label>
         <select id="decina">
             <option value="">--Seleziona--</option>
@@ -100,7 +98,6 @@
             <option value="9">81-90</option>
         </select>
 
-        <!-- Puntata fissa con input -->
         <label for="puntata">Puntata Fissa:</label>
         <input type="number" id="puntata" min="1" max="90" placeholder="1-90">
     </div>
@@ -113,45 +110,40 @@
 
     <div class="list">
         <h3>Numeri Estratti</h3>
-        <ul id="numeriEstratti">
-            <!-- Numeri estratti saranno aggiunti qui -->
-        </ul>
+        <ul id="numeriEstratti"></ul>
     </div>
 
     <button id="startButton" onclick="startSimulation()">Inizia Simulazione</button>
+    <button id="exportButton" onclick="exportToCSV()">Esporta in CSV</button>
+    <label for="fileInput">Carica file CSV:</label>
+    <input type="file" id="fileInput" />
+    <button onclick="convertCSVToJSON()">Converti in JSON</button>
 
     <script>
-        // Variabili globali
         let estrazioniTotali = 0;
         let vincite = 0;
         let numeriEstratti = [];
         let interval;
 
-        // Funzione per generare un numero casuale tra 1 e 90
         function estrazioneNumero() {
             return Math.floor(Math.random() * 90) + 1;
         }
 
-        // Funzione per avviare la simulazione
         function startSimulation() {
-            // Reset stato
             estrazioniTotali = 0;
             vincite = 0;
             numeriEstratti = [];
             document.getElementById('vincite').innerText = `Vincite: ${vincite}`;
             document.getElementById('estrazioni-totali').innerText = `Estrazioni Totali: ${estrazioniTotali}`;
-            document.getElementById('numeriEstratti').innerHTML = ''; // Pulisce la lista dei numeri
+            document.getElementById('numeriEstratti').innerHTML = '';
 
-            // Disabilita il bottone per evitare multiple simulazioni
             document.getElementById('startButton').disabled = true;
 
-            // Avvia la simulazione ogni 2 secondi
             interval = setInterval(() => {
                 const numero = estrazioneNumero();
                 numeriEstratti.push(numero);
                 estrazioniTotali++;
 
-                // Aggiungi il numero estratto alla lista
                 const li = document.createElement('li');
                 li.innerText = numero;
                 document.getElementById('numeriEstratti').appendChild(li);
@@ -159,30 +151,26 @@
                 document.getElementById('estrazione').innerText = `Numero Estratto: ${numero}`;
                 document.getElementById('estrazioni-totali').innerText = `Estrazioni Totali: ${estrazioniTotali}`;
 
-                // Verifica se la condizione di vincita è soddisfatta
                 if (verificaVincita(numero)) {
                     vincite++;
                     document.getElementById('vincite').innerText = `Vincite: ${vincite}`;
                 }
 
-                // Ferma la simulazione dopo 10 vincite
                 if (vincite >= 10) {
                     clearInterval(interval);
                     alert(`Hai vinto 10 volte dopo ${estrazioniTotali} estrazioni!`);
-                    document.getElementById('startButton').disabled = false; // Rende di nuovo cliccabile il bottone
+                    document.getElementById('startButton').disabled = false;
                 }
 
-            }, 2000); // Ogni 2 secondi
+            }, 2000);
         }
 
-        // Funzione per verificare le condizioni di vincita
         function verificaVincita(numero) {
             const pari = document.getElementById('pari').classList.contains('active');
             const dispari = document.getElementById('dispari').classList.contains('active');
             const decina = document.getElementById('decina').value;
             const puntataFissa = document.getElementById('puntata').value;
 
-            // Verifica le condizioni di vincita
             if (pari && numero % 2 === 0) return true;
             if (dispari && numero % 2 !== 0) return true;
             if (decina && Math.floor((numero - 1) / 10) + 1 == decina) return true;
@@ -191,7 +179,52 @@
             return false;
         }
 
-        // Funzione per attivare/disattivare i bottoni toggle
+        function exportToCSV() {
+            const numeriEstrattiCSV = numeriEstratti.join('\n');
+            const csvContent = "data:text/csv;charset=utf-8,Numero\n" + numeriEstrattiCSV;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'numeri_estratti.csv');
+            link.click();
+        }
+
+        function convertCSVToJSON() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Per favore seleziona un file CSV');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const csvContent = event.target.result;
+                const lines = csvContent.split('\n');
+                const result = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const currentLine = lines[i].split(',');
+                    if (currentLine.length > 1) {
+                        result.push({ "Numero": currentLine[0] });
+                    }
+                }
+
+                const jsonContent = JSON.stringify(result, null, 4);
+                console.log("JSON:", jsonContent);
+
+                const jsonBlob = new Blob([jsonContent], { type: 'application/json' });
+                const jsonUrl = URL.createObjectURL(jsonBlob);
+                const jsonLink = document.createElement('a');
+                jsonLink.setAttribute('href', jsonUrl);
+                jsonLink.setAttribute('download', 'numeri_estratti.json');
+                jsonLink.click();
+            };
+
+            reader.readAsText(file);
+        }
+
         document.querySelectorAll('.toggle-button').forEach(button => {
             button.addEventListener('click', () => {
                 button.classList.toggle('active');
